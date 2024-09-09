@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
-
+const uri = "mongodb+srv://HazemSamir:4HFwlJBjq8mgG0bl@cluster0.ubz4dy8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://localhost:27017/clinicDB', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(uri);
     console.log("MongoDB connected");
   } catch (err) {
     console.error("MongoDB connection error:", err);
