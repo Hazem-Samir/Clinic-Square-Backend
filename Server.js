@@ -15,6 +15,8 @@
 
 
 const express = require('express');
+const dotenv = require('dotenv');
+dotenv.config({ path: 'config.env' });
 const connectDB = require('./db/dbConnection'); // MongoDB connection
 const authRoutes = require('./Routes/auth'); // Authentication routes
 
