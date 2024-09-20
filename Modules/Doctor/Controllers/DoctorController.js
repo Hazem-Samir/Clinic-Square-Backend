@@ -32,6 +32,18 @@ exports.updateDermatologist = asyncHandler(async (req, res, next) => {
       location: req.body.location,
       about: req.body.about,
       educationAndExperience: req.body.educationAndExperience,
+      reviews: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Review',
+        },
+      ],
+      rating: Number,
+      password: {
+        type: String,
+        required: true,
+        select: false,
+      },
     },
     {
       new: true,

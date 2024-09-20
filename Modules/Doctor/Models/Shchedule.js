@@ -72,5 +72,5 @@ Schedule.pre('save', function (next) {
   next();
 });
 
-//2)create model
+
 module.exports = mongoose.model('Schedule', Schedule);

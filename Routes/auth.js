@@ -4,14 +4,12 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const Doctor = require("../Modules/Doctor/Models/Doctor");
+const jwt = require('jsonwebtoken');
 
-// Login Route
 router.post(
-  "/login",
-  body("email").isEmail().withMessage("Please enter a valid email!"),
-  body("password")
-    .isLength({ min: 8, max: 12 })
-    .withMessage("Password should be between 8-12 characters"),
+  '/login',
+  body('email').isEmail().withMessage('Please enter a valid email!'),
+  body('password').isLength({ min: 8, max: 12 }).withMessage('Password should be between 8-12 characters'),
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -22,16 +20,21 @@ router.post(
       // Check if email exists
       const doctor = await Doctor.findOne({ email: req.body.email });
       if (!doctor) {
-        return res.status(404).json({ errors: [{ msg: "Email or password not found!" }] });
+        return res.status(404).json({ errors: [{ msg: 'Email or password not found!' }] });
       }
 
       // Compare password
       const isMatch = await bcrypt.compare(req.body.password, doctor.password);
       if (!isMatch) {
-        return res.status(404).json({ errors: [{ msg: "Email or password not found!" }] });
+        return res.status(404).json({ errors: [{ msg: 'Email or password not found!' }] });
       }
 
-      res.status(200).json({ doctor });
+      // Generate JWT token
+      const token = jwt.sign({ id: doctor._id }, process.env.JWT_SECRET, {
+        expiresIn: '1h', // Token will expire in 1 hour
+      });
+
+      res.status(200).json({ token });
     } catch (err) {
       res.status(500).json({ err });
     }
